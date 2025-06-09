@@ -1,7 +1,23 @@
-FROM node:14-alpine
+FROM node:18-bullseye
 
 # Add tool which will fix init process
-RUN apk add dumb-init
+# RUN apk add dumb-init curl bash
+
+# Install goose CLI
+# Install dependencies
+RUN apt-get update && apt-get install -y dumb-init  curl bash bzip2 libxcb1
+
+# Download and extract Goose CLI manually (replace version as needed)
+ENV GOOSE_VERSION="v1.0.24"
+RUN curl -L -o goose.tar.bz2 \
+      "https://github.com/block/goose/releases/download/v1.0.24/goose-aarch64-unknown-linux-gnu.tar.bz2" \
+    && tar -xjf goose.tar.bz2 \
+    && mv goose /usr/local/bin/goose \
+    && chmod +x /usr/local/bin/goose \
+    && rm goose.tar.bz2
+
+# (Optional) Add a non-root user
+RUN useradd -ms /bin/bash goose
 
 # Optimise for production
 ENV NODE_ENV production
