@@ -2,28 +2,6 @@
 
 Project Structure
 
-.
-├── controllers
-│ ├── authController.js
-│ ├── fundController.js
-│ ├── healthController.js
-│ ├── invoiceController.js
-│ ├── reportController.js
-│ └── simulateController.js
-├── routes
-│ ├── authRoutes.js
-│ ├── fundRoutes.js
-│ ├── index.js
-│ ├── invoiceRoutes.js
-│ └── reportRoutes.js
-├── services
-│ └── simulateService.js
-├── index.js
-├── server.js
-├── package.json
-└── README.md
-
-
 ## API Routes
 
 | Method | Route                   | Description                              |
