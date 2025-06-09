@@ -1,11 +1,11 @@
 const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 8080;
+const router = express.Router();
 
-app.get('/', (req, res) => {
-  res.send('Hello from Node.js on DigitalOcean App Platform!');
-});
+const { simulate } = require('../controllers/simulateController');
+const { healthCheck } = require('../controllers/healthController');
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Routes
+router.get('/simulate', simulate);
+router.get('/health', healthCheck);
+
+module.exports = router;
