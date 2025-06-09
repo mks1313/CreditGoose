@@ -7,13 +7,20 @@ const HOST = '0.0.0.0';
 // Middleware
 app.use(express.json());
 
-// Routes
+// Rutas principales
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/authRoutes'));
 app.use('/invoices', require('./routes/invoiceRoutes'));
 app.use('/fund', require('./routes/fundRoutes'));
 app.use('/report', require('./routes/reportRoutes'));
+app.use('/goose', (req, res, next) => {
+  console.log(`Goose route hit: ${req.method} ${req.originalUrl}`);
+  next();
+}, require('./routes/gooseRoutes'));
 
+app.use('/goose', require('./routes/gooseRoutes')); // <--- Aquí las rutas de Goose
+
+// Arrancar servidor
 const server = app.listen(PORT, HOST, () => {
   console.log(`Running on http://${HOST}:${PORT}`);
 });
