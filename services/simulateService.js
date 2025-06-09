@@ -1,5 +1,5 @@
 function simulateLoan({ amount, duration }) {
-  // Simulación básica
+  // Simulation básic
   const interestRate = 0.05;
   const totalRepayable = amount * (1 + interestRate);
   const monthlyPayment = totalRepayable / duration;

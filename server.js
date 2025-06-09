@@ -9,6 +9,10 @@ app.use(express.json());
 
 // Routes
 app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/authRoutes'));
+app.use('/invoices', require('./routes/invoiceRoutes'));
+app.use('/fund', require('./routes/fundRoutes'));
+app.use('/report', require('./routes/reportRoutes'));
 
 const server = app.listen(PORT, HOST, () => {
   console.log(`Running on http://${HOST}:${PORT}`);

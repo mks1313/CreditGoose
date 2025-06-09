@@ -1,49 +1,40 @@
 # CreditGoose Backend
 
-This is the backend service for the CreditGoose platform. It provides API endpoints for loan simulation and other core features.
+Project Structure
 
-
-
-- Node.js
-- Express.js
-- Docker
-- DigitalOcean App Platform
-
-## 🧑‍💻 Getting Started
-
-### Prerequisites
-
-- Node.js (v18+ recommended)
-- npm
-- Docker (optional, for containerized deployment)
-
-## 📦 Deployment
-
-The app is configured to run on DigitalOcean App Platform.
-
-## 📁 Project Structure
-
-```
 .
 ├── controllers
-│   └── healthController.js
+│ ├── authController.js
+│ ├── fundController.js
+│ ├── healthController.js
+│ ├── invoiceController.js
+│ ├── reportController.js
+│ └── simulateController.js
 ├── routes
-│   └── index.js
+│ ├── authRoutes.js
+│ ├── fundRoutes.js
+│ ├── index.js
+│ ├── invoiceRoutes.js
+│ └── reportRoutes.js
 ├── services
+│ └── simulateService.js
+├── index.js
 ├── server.js
-├── Dockerfile
 ├── package.json
 └── README.md
-```
 
-## 🛡️ Environment Variables
 
-Create a `.env` file (not committed to version control):
+## API Routes
 
-```env
-PORT=8080
-```
-
-## 🧪 Testing
-
-To be implemented.
+| Method | Route                   | Description                              |
+|--------|-------------------------|------------------------------------------|
+| POST   | `/auth/connect`          | Simulate connection to Square API (mock)|
+| POST   | `/fund/request`          | Request funding for invoices            |
+| POST   | `/invoices/connect-square` | Simulate connection to Square API     |
+| GET    | `/invoices/invoices`     | Get list of invoices                    |
+| POST   | `/invoices/fund`         | Request funding (mock)                  |
+| POST   | `/invoices/auto-funding` | Enable auto-funding                     |
+| GET    | `/invoices/report`       | Get monthly report data                 |
+| GET    | `/report/monthly`        | Alternative monthly report endpoint     |
+| GET    | `/simulate`              | Simulate monthly payments with interest |
+| GET    | `/health`                | Backend health check                    |
