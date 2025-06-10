@@ -1,11 +1,15 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 const PORT = process.env.PORT || 8080;
 const HOST = '0.0.0.0';
 
-// Middleware
+////////////////////////////////////////////////////////////////////////////////
+// DO NOT MOVE this lines from the top of the file
+app.use(cors());
 app.use(express.json());
+////////////////////////////////////////////////////////////////////////////////
 
 // Rutas principales
 app.use('/', require('./routes/index'));
