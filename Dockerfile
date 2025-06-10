@@ -9,8 +9,9 @@ RUN apt-get update && apt-get install -y dumb-init  curl bash bzip2 libxcb1
 
 # Download and extract Goose CLI manually (replace version as needed)
 ENV GOOSE_VERSION=v1.0.24
-RUN curl -L -o goose.tar.bz2 \
-      "https://github.com/block/goose/releases/download/v1.0.24/goose-aarch64-unknown-linux-gnu.tar.bz2" \
+RUN ARCH=${ARCH:-aarch64} && \
+    curl -L -o goose.tar.bz2 \
+      "https://github.com/block/goose/releases/download/v1.0.24/goose-{$ARCH}-unknown-linux-gnu.tar.bz2" \
     && tar -xjf goose.tar.bz2 \
     && mv goose /usr/local/bin/goose \
     && chmod +x /usr/local/bin/goose \
