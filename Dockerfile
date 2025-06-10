@@ -16,6 +16,15 @@ RUN curl -L -o goose.tar.bz2 \
     && chmod +x /usr/local/bin/goose \
     && rm goose.tar.bz2
 
+# Create Goose config directory
+RUN mkdir -p /root/.config/goose
+
+# Copy pre-generated Goose config file (see below for example content)
+COPY ./goose/config.yaml /root/.config/goose/config.yaml
+
+ENV GOOSE_PROVIDER=google
+ENV GOOSE_MODEL=gemini-2.0-flash
+
 # (Optional) Add a non-root user
 RUN useradd -ms /bin/bash goose
 
