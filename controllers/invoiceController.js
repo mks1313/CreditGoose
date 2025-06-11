@@ -10,6 +10,7 @@ exports.getInvoices = (req, res) => {
         id: "inv001",
         merchant_id: "mch123",
         amount: 2500.75,
+        fee: 2.5,
         issue_date: "2024-12-01T00:00:00Z",
         due_date: "2025-01-01T00:00:00Z",
         status: "approved"
@@ -18,6 +19,7 @@ exports.getInvoices = (req, res) => {
         id: "inv002",
         merchant_id: "mch456",
         amount: 1800.00,
+        fee: 3.0,
         issue_date: "2024-12-15T00:00:00Z",
         due_date: "2025-01-15T00:00:00Z",
         status: "pending"
@@ -26,10 +28,29 @@ exports.getInvoices = (req, res) => {
         id: "inv003",
         merchant_id: "mch789",
         amount: 3000.50,
+        fee: 3.5,
         issue_date: "2025-01-01T00:00:00Z",
         due_date: "2025-02-01T00:00:00Z",
         status: "funded"
-      }
+      },
+      {
+        id: "inv004",
+        merchant_id: "mch001",
+        amount: 3000.50,
+        fee: 3.5,
+        issue_date: "2025-01-01T00:00:00Z",
+        due_date: "2025-02-01T00:00:00Z",
+        status: "funded"
+      },
+      {
+        id: "inv005",
+        merchant_id: "mch002",
+        amount: 3000.50,
+        fee: 2.5,
+        issue_date: "2025-01-01T00:00:00Z",
+        due_date: "2025-02-01T00:00:00Z",
+        status: "funded"
+      },
     ],
     stats: {
       total_count: 3,
