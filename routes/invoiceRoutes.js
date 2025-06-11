@@ -7,5 +7,6 @@ router.get('/invoices', invoiceController.getInvoices);
 router.post('/fund', invoiceController.fundInvoices);
 router.post('/auto-funding', invoiceController.enableAutoFunding);
 router.get('/report', invoiceController.getMonthlyReport);
+router.post('/submit', invoiceController.submitInvoice);
 
 module.exports = router;
