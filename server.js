@@ -17,6 +17,7 @@ app.use('/auth', require('./routes/authRoutes'));
 app.use('/invoices', require('./routes/invoiceRoutes'));
 app.use('/fund', require('./routes/fundRoutes'));
 app.use('/report', require('./routes/reportRoutes'));
+app.use('/admin', require('./routes/adminRoutes'));
 app.use('/goose', (req, res, next) => {
   console.log(`Goose route hit: ${req.method} ${req.originalUrl}`);
   next();
