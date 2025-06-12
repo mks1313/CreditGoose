@@ -19,14 +19,35 @@ exports.getPrompts = (req, res) => {
 const https = require('https');
 const { exec } = require('child_process');
 
+function extractWebSearchResult(response) {
+  try {
+    if (response.candidates && response.candidates[0] && response.candidates[0].content) {
+      const parts = response.candidates[0].content.parts;
+      if (parts && parts[0] && parts[0].text) {
+        return parts[0].text;
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error('Error extracting web search result:', error);
+    return null;
+  }
+}
+
 exports.setPrompts = (req, res) => {
-  console.log(`Received: ${req.body.web_searches}, ${req.body.goose_prompts}`);
+  console.log(`Received: ${req.body.web_searches}`);
 
   console.log('Doing Web Search...');
-  web_search = req.body.web_search;
+
+  // Filter active prompts and extract their text
+  const webSearchQuery = req.body.web_searches
+    .filter(prompt => prompt.active)
+    .map(prompt => prompt.text)
+    .join(' ');
+
+  console.log(`Web Search query: ${webSearchQuery}`);
 
   // Actual Web Search
-  const webSearchQuery = "Find product description for GitLab Ultimate";
   const geminiApiKey = process.env.GEMINI_API_KEY; // Assuming you have the API key in environment variables
   const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
   const geminiData = JSON.stringify({
@@ -70,37 +91,18 @@ exports.setPrompts = (req, res) => {
     geminiReq.end();
   });
 
-  // Actual Goose CLI call
-  goose_prompt = req.body.goose_prompt;
-  const gooseCliCommand = `goose run -t "${goose_prompt}"`; // Assuming 'goose' is in the system's PATH
+  Promise.all([webSearchPromise])
+    .then(([webSearchResult]) => {
+        console.debug("Web Search result:", webSearchResult);
 
-  const goosePromise = new Promise((resolve, reject) => {
-    exec(gooseCliCommand, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      } else {
-        try {
-            const parsedGooseResponse = JSON.parse(stdout);
-            resolve(parsedGooseResponse);
-        } catch (parseError) {
-            resolve(stdout);
-        }
-      }
-    });
-  });
-
-
-  Promise.all([webSearchPromise, goosePromise])
-    .then(([webSearchResult, goosePromptResult]) => {
-        console.debug("Web Search Result:", webSearchResult);
+        const extractedResponse = extractWebSearchResult(webSearchResult);
       res.json({
-        web_search_result: webSearchResult || null,
-        goose_prompt_result: goosePromptResult || null,
+        web_search_result: extractedResponse || null,
       });
     })
     .catch(errors => {
-      console.error("One or more promises rejected:", errors);
-      res.status(500).json({ error: "An error occurred during web search or Goose execution." });
+      console.error("Web Search promise rejected:", errors);
+      res.status(500).json({ error: "An error occurred during Web Search execution." });
     });
 };
 
@@ -150,8 +152,7 @@ function extractGooseResponse(gooseOutput) {
 exports.runGoose = (req, res) => {
   console.log(`Received: ${req.body.web_searches}, ${req.body.goose_prompts}`);
 
-  console.log('Doing Web Search...');
-  web_search = req.body.web_search;
+  console.log('Running Goose prompt...');
 
   // Filter active prompts and extract their text
   const activePrompts = req.body.goose_prompts
