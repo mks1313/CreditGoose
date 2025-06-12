@@ -13,7 +13,8 @@ exports.getInvoices = (req, res) => {
         fee: 2.5,
         issue_date: "2024-12-01T00:00:00Z",
         due_date: "2025-01-01T00:00:00Z",
-        status: "approved"
+        status: "approved",
+        fee: 25.75
       },
       {
         id: "inv002",
@@ -22,7 +23,8 @@ exports.getInvoices = (req, res) => {
         fee: 3.0,
         issue_date: "2024-12-15T00:00:00Z",
         due_date: "2025-01-15T00:00:00Z",
-        status: "pending"
+        status: "pending",
+        fee: 18.00
       },
       {
         id: "inv003",
@@ -55,7 +57,8 @@ exports.getInvoices = (req, res) => {
     stats: {
       total_count: 3,
       total_amount: 7301.25,
-      total_funded_amount: 3000.50
+      total_funded_amount: 3000.50,
+      total_fees: 73.75
     }
   });
 };
@@ -286,4 +289,83 @@ Respond strictly just in one line without newline characters.`;
       console.error("The promise rejected:", errors);
       res.status(500).json({ error: "An error occurred during Goose execution." });
     });
+};
+
+exports.fundInvoiceById = (req, res) => {
+  const invoiceId = req.params.id;
+
+  const mockInvoices = [
+    {
+      id: "inv001",
+      merchant_id: "mch123",
+      amount: 2500.75,
+      issue_date: "2024-12-01T00:00:00Z",
+      due_date: "2025-01-01T00:00:00Z",
+      status: "approved",
+      fee: 25.75
+    },
+    {
+      id: "inv002",
+      merchant_id: "mch456",
+      amount: 1800.00,
+      issue_date: "2024-12-15T00:00:00Z",
+      due_date: "2025-01-15T00:00:00Z",
+      status: "pending",
+      fee: 18.00
+    },
+    {
+      id: "inv003",
+      merchant_id: "mch789",
+      amount: 3000.50,
+      issue_date: "2025-01-01T00:00:00Z",
+      due_date: "2025-02-01T00:00:00Z",
+      status: "funded",
+      fee: 3.5
+    },
+    {
+      id: "inv004",
+      merchant_id: "mch001",
+      amount: 3000.50,
+      issue_date: "2025-01-01T00:00:00Z",
+      due_date: "2025-02-01T00:00:00Z",
+      status: "funded",
+      fee: 3.5
+    },
+    {
+      id: "inv005",
+      merchant_id: "mch002",
+      amount: 3000.50,
+      issue_date: "2025-01-01T00:00:00Z",
+      due_date: "2025-02-01T00:00:00Z",
+      status: "funded",
+      fee: 2.5
+    }
+  ];
+
+  const invoice = mockInvoices.find((inv) => inv.id === invoiceId);
+
+  if (!invoice) {
+    return res.status(404).json({ error: "Invoice not found" });
+  }
+
+  if (invoice.status !== "approved") {
+  return res.json({
+    status: "rejected",
+    message: `This invoice cannot be financed because it is marked as '${invoice.status}'.`,
+  });
+}
+
+  const advanceRate = 85;
+  const fundedAmount = (invoice.amount * advanceRate) / 100;
+
+  res.json({
+    status: "approved",
+    message: "Financing approved",
+    invoice: {
+      ...invoice,
+      status: "funded",
+      advance_rate: advanceRate,
+      funded_amount: fundedAmount.toFixed(2),
+    },
+  });
 };
