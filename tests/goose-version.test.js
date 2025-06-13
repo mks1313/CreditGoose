@@ -7,7 +7,7 @@ jest.mock('child_process', () => ({
   exec: jest.fn()
 }));
 
-// Create a mock Express app for testing
+// Create a mock Express app for testing .
 const app = express();
 
 // Recreate the endpoint for testing
