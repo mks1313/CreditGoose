@@ -18,12 +18,16 @@ app.use('/invoices', require('./routes/invoiceRoutes'));
 app.use('/fund', require('./routes/fundRoutes'));
 app.use('/report', require('./routes/reportRoutes'));
 app.use('/admin', require('./routes/adminRoutes'));
-app.use('/goose', (req, res, next) => {
-  console.log(`Goose route hit: ${req.method} ${req.originalUrl}`);
-  next();
-}, require('./routes/gooseRoutes'));
+// app.use('/goose', (req, res, next) => {
+//   console.log(`Goose route hit: ${req.method} ${req.originalUrl}`);
+//   next();
+// }, require('./routes/gooseRoutes'));
 
-app.use('/goose', require('./routes/gooseRoutes')); // <--- Aquí las rutas de Goose
+// app.use('/goose', require('./routes/gooseRoutes')); // <--- Aquí las rutas de Goose
+
+app.use('/goose', (req, res) => {
+  res.status(503).send("🐥 Goose is currently in demo mode and taking a nap on the farm.");
+});
 
 // Arrancar servidor
 const server = app.listen(PORT, HOST, () => {
