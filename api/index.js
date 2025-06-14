@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const PORT = process.env.PORT || 8080;
-const HOST = '0.0.0.0';
+//const PORT = process.env.PORT || 8080;
+//const HOST = '0.0.0.0';
 
 ////////////////////////////////////////////////////////////////////////////////
 // DO NOT MOVE this lines from the top of the file
@@ -30,9 +30,9 @@ app.use('/goose', (req, res) => {
 });
 
 // Arrancar servidor
-const server = app.listen(PORT, HOST, () => {
-  console.log(`Running on http://${HOST}:${PORT}`);
-});
+// const server = app.listen(PORT, HOST, () => {
+//   console.log(`Running on http://${HOST}:${PORT}`);
+// });
 
 // Graceful shutdown
 function closeGracefully(signal) {
@@ -45,3 +45,5 @@ function closeGracefully(signal) {
 
 process.on('SIGINT', closeGracefully);
 process.on('SIGTERM', closeGracefully);
+
+module.exports = app;
