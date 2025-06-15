@@ -8,11 +8,17 @@ exports.getPrompts = (req, res) => {
       }
     ],
     goose_prompts: [
-      {
-        text: 'Retrieve last year Gross and Net profit margins. Return as JSON with "gross" and "net" fields.',
-        active: true,
-      }
-    ],
+  {
+    text: '🛑 Goose is temporarily unavailable. You can still admire its feathers though.',
+    active: false,
+  }
+],
+    // goose_prompts: [
+    //   {
+    //     text: 'Retrieve last year Gross and Net profit margins. Return as JSON with "gross" and "net" fields.',
+    //     active: true,
+    //   }
+    // ],
   });
 };
 
@@ -148,55 +154,69 @@ function extractGooseResponse(gooseOutput) {
   return null;
 }
 
-// Updated runGoose function with extraction
 exports.runGoose = (req, res) => {
-  console.log(`Received: ${req.body.web_searches}, ${req.body.goose_prompts}`);
+  const sleepyMessages = [
+    "🪶 Goose is taking a nap, please don't disturb... 😴",
+    "🐤 Goose is offline for emotional maintenance.",
+    "🧘 Goose went to meditate by the lake of answers.",
+    "📵 Goose is unavailable. Exploring a life without prompts.",
+    "🛌 Goose is sleeping on the cloud. Please check back later.",
+  ];
 
-  console.log('Running Goose prompt...');
+  const message = sleepyMessages[Math.floor(Math.random() * sleepyMessages.length)];
 
-  // Filter active prompts and extract their text
-  const activePrompts = req.body.goose_prompts
-    .filter(prompt => prompt.active)
-    .map(prompt => prompt.text);
-
-  // Join multiple active prompts with a separator, or use the first one
-  goose_prompt = activePrompts.length > 0 ? activePrompts.join(' ') : '';
-
-  // Handle case where no active prompts exist
-  if (!goose_prompt) {
-    return res.status(400).json({ error: "No active prompts found" });
-  }
-
-  const gooseCliCommand = `goose run -t "${goose_prompt}"`; // Assuming 'goose' is in the system's PATH
-
-  const goosePromise = new Promise((resolve, reject) => {
-    exec(gooseCliCommand, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      } else {
-        try {
-            const parsedGooseResponse = JSON.parse(stdout);
-            resolve(parsedGooseResponse);
-        } catch (parseError) {
-            resolve(stdout);
-        }
-      }
-    });
-  });
-
-  Promise.all([goosePromise])
-    .then(([goosePromptResult]) => {
-        console.debug("Goose result:", goosePromptResult);
-
-        // Extract the actual response from Goose output
-        const extractedResponse = extractGooseResponse(goosePromptResult);
-
-      res.json({
-        goose: extractedResponse || null,
-      });
-    })
-    .catch(errors => {
-      console.error("The promise rejected:", errors);
-      res.status(500).json({ error: "An error occurred during Goose execution." });
-    });
+  res.status(200).json({ goose: message });
 };
+
+// Updated runGoose function with extraction
+// exports.runGoose = (req, res) => {
+//   console.log(`Received: ${req.body.web_searches}, ${req.body.goose_prompts}`);
+
+//   console.log('Running Goose prompt...');
+
+//   // Filter active prompts and extract their text
+//   const activePrompts = req.body.goose_prompts
+//     .filter(prompt => prompt.active)
+//     .map(prompt => prompt.text);
+
+//   // Join multiple active prompts with a separator, or use the first one
+//   goose_prompt = activePrompts.length > 0 ? activePrompts.join(' ') : '';
+
+//   // Handle case where no active prompts exist
+//   if (!goose_prompt) {
+//     return res.status(400).json({ error: "No active prompts found" });
+//   }
+
+//   const gooseCliCommand = `goose run -t "${goose_prompt}"`; // Assuming 'goose' is in the system's PATH
+
+//   const goosePromise = new Promise((resolve, reject) => {
+//     exec(gooseCliCommand, (error, stdout, stderr) => {
+//       if (error) {
+//         reject(error);
+//       } else {
+//         try {
+//             const parsedGooseResponse = JSON.parse(stdout);
+//             resolve(parsedGooseResponse);
+//         } catch (parseError) {
+//             resolve(stdout);
+//         }
+//       }
+//     });
+//   });
+
+//   Promise.all([goosePromise])
+//     .then(([goosePromptResult]) => {
+//         console.debug("Goose result:", goosePromptResult);
+
+//         // Extract the actual response from Goose output
+//         const extractedResponse = extractGooseResponse(goosePromptResult);
+
+//       res.json({
+//         goose: extractedResponse || null,
+//       });
+//     })
+//     .catch(errors => {
+//       console.error("The promise rejected:", errors);
+//       res.status(500).json({ error: "An error occurred during Goose execution." });
+//     });
+// };
